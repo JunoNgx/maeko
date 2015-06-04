@@ -1,0 +1,59 @@
+{
+    luxe: {
+        window: {
+            width: 1280,
+            height: 720,
+            title: 'myproject',
+            fullscreen: false,
+            resizable: true,
+            borderless: false
+        }
+    },
+
+	flow : {
+        build: {
+            android : {
+            	"comments": "Path to your sdk and ant, in quote as strings",
+
+            	"comments": "'C:/AndroidDev/android-sdk-windows/'",
+                sdk : 'C:/AndroidDev/android-sdk-windows/',
+
+                "comments": "On Windows, point to your ant/bin/ant.bat, also in quote",
+                "comments": "'C:/AndroidDev/apache-ant-1.9.4/bin/ant.bat'",
+                ant_path : 'C:/AndroidDev/apache-ant-1.9.4/bin/ant.bat'
+            }
+        }
+    },
+
+ 	project : {
+		name : 'Project Maeko',
+		version : '0.0.1',
+		author : 'Aureoline Tetrahedron',
+
+    app : {
+    	"comments": "Spacing in app name is currently breaking the build",
+    	"comments": "so avoid spaces for the moment",
+		name : 'ProjectMaeko',
+		package : 'com.junongx.maeko',
+		main : 'Main',
+        mobile: {
+            orientation: 'landscape',
+            android: {
+                sdk_target: '19'
+            }
+        }
+    },
+
+    build : {
+      dependencies : {
+        luxe : '*',
+      }
+    },
+
+    files : {
+      config : 'config.json',
+      assets : 'assets/',
+      comments: "index : { path:'custom_index.html => index.html', template:'project', not_listed:true }",
+    }
+  }
+}
