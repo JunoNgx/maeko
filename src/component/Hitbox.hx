@@ -5,9 +5,6 @@ import luxe.options.ComponentOptions;
 
 import luxe.collision.Collision;
 
-// import luxe.collision.shapes.Polygon;
-// import luxe.collision.shapes.Shape;
-
 import luxe.Vector;
 
 typedef HitboxOptions = {
@@ -27,27 +24,28 @@ class Hitbox extends Component {
 	}
 
 	override public function update(dt: Float) {
-		var host: luxe.Sprite = cast entity;
+		var host: luxe.Visual = cast entity;
 
 		body.position = host.pos;
 		body.rotation = host.rotation_z;
 
-		#if debug
-			states.Play.sDrawer.drawPolygon(body);
-		#end
+		// #if debug
+		// 	states.Play.sDrawer.drawPolygon(body);
+		// #end
 	}
 
-	public function contact(_name: String) {
-		var engaged: Bool = false;
+	public function collide(_name: String): luxe.Entity {
+		// var engaged: Bool = false;
 		var targetList = new Array<luxe.Entity>();
 		Luxe.scene.get_named_like(_name, targetList);
 
 		for (target in targetList) {
 			if (Collision.shapeWithShape(this.body, target.get('hitbox').body) != null) {
-				engaged = true;
+				// engaged = true;
+				return target;
 			}
 		}
 
-		return engaged;
+		return null;
 	}
 }

@@ -1,12 +1,14 @@
 package entity;
 
-import luxe.Sprite;
 import luxe.Vector;
 import luxe.Color;
-import luxe.Input;
 
-// import component.Velocity;
-// import component.AccelCtrl;
+import phoenix.geometry.Geometry;
+import phoenix.geometry.Vertex;
+import phoenix.Batcher.PrimitiveType;
+
+import luxe.Particles;
+import luxe.tween.Actuate;
 
 import luxe.collision.Collision;
 
@@ -17,159 +19,114 @@ typedef PosEvent = {
 	y: Float
 }
 
-class Maeko extends Sprite {
+class Maeko extends luxe.Sprite {
+
+	public var barrel: Int = 48;
 
 	public var velocity: component.Velocity;
 	public var hitbox: component.Hitbox;
 
-	public static var harvest_cooldown_max: Float = 2;
-	public static var speed: Float = 2000;
+	public var ammo: Int;
+	public var ammo_max: Int;
 
-	// public var disp_rotation: Float;
-	public var ammo: Int = 40;
-
-	public var harvest_contact: Bool = false;
-	public var harvest_cooldown: Float;
-
-	override public function new() {
+	override public function new(_maxAmmo: Int) {
 		super({
 			name: 'maeko',
 			name_unique: true,
-			pos: new Vector (Main.w/2, Main.h/2),
-			// texture: Luxe.resources.texture('assets/dulce.png'),
-			size: new Vector(60, 100),
-			color: new Color().rgb(0x628179),
-
+			pos: new Vector(Main.w/2, Main.h * 3/2),
+			color: Main.c1.clone(),
+			centered: false, // sigh, wasted my time. workaround for using luxe.sprite instead of luxe.visual
 		});
+
+		createGeometry();
+
+		ammo_max = _maxAmmo;
+		refillAmmo();
 
 		velocity = new component.Velocity({
 			name: 'velocity'
 		});
 		this.add(velocity);
 
+		this.add(new component.maeko.AccelMove({
+			name: 'accel'
+		}));
+
 		hitbox = new component.Hitbox({
 			name: 'hitbox',
 			body: luxe.collision.shapes.Polygon.create(pos.x, pos.y, 4, 32)
 		});
 		this.add(hitbox);
-
-		this.add(new component.MaekoCannon());
-
-		this.add(new component.KeepBounds({
-			top: 0,
-			bottom: Main.h,
-			left: 0,
-			right: Main.w,
-		}));
-		// this.add(new AccelCtrl({name: 'accel control'}));
-
-		Luxe.events.listen('ring.pos', function(e: PosEvent) {
-			this.orientate(e.x, e.y);
-		});
-
-		harvest_cooldown = harvest_cooldown_max;
+		this.radians = -Math.PI/2;
 	}
 
-	override public function update(dt: Float) {
+	function createGeometry() {
 
-		// Luxe.draw.ngon({
-		// 	immediate: true,
-		// 	r: C.player_radius,
-		// 	sides: 3,
-		// 	x: this.pos.x,
-		// 	y: this.pos.y,
-		// 	angle: -(this.disp_rotation * 180/ Math.PI),
-		// 	solid: true,
-		// 	color: new Color().rgb(0xF92672),
-		// });
-		
-		// if (Math.abs(velocity.x) > 100 || Math.abs(velocity.y) > 100) {
-		// 	// this.disp_rotation = Math.atan2( 
-		// 	this.radians = Math.atan2( 
-		// 		Math.floor(Main.accel_y * 100),
-		// 		Math.floor(Main.accel_x * 100)
-		// 	);
-		// }
+		var ant_hl: Float = 22; // anterior half length
+		var pos_hl: Float = 36; // anterior half length
+		var hh: Float = 24; // half height
 
-		// Luxe.draw.texture({
-		// 	pos: this.pos,
-		// 	texture: Luxe.resources.texture('assets/dulce.png'),
-		// 	rotation: new luxe.Quaternion().setFromEuler( new Vector(0, 0, -this.disp_rotation)),
-		// 	immediate: true,
-		// });
-
-		Luxe.draw.text({
-			text: '${ammo}',
-			pos: new Vector(this.pos.x, this.pos.y - 64),
-			point_size: 48,
-			align: right,
-			immediate: true,
+		this.geometry = new Geometry({
+			batcher: Luxe.renderer.batcher,
+			// origin: new Vector(-hh, -ant_hl)
 		});
+		this.geometry.primitive_type = PrimitiveType.triangle_fan;
+		this.geometry.add(new Vertex(new Vector(hh, -ant_hl), this.color));
+		this.geometry.add(new Vertex(new Vector(hh, ant_hl), this.color));
+		this.geometry.add(new Vertex(new Vector(-hh, pos_hl), this.color));
+		this.geometry.add(new Vertex(new Vector(-hh, -pos_hl), this.color));
+	}
 
-		this.velocity.x = Main.accel_x * speed;
-		this.velocity.y = Main.accel_y * speed;
+	// override public function update(dt: Float) {
 
-		// collision processing
+	// 	Luxe.draw.text({
+	// 		text: '${ammo}',
+	// 		pos: new Vector(this.pos.x, this.pos.y - 64),
+	// 		point_size: 48,
+	// 		align: right,
+	// 		immediate: true,
+	// 	});
 
-		// var ammoList = new Array<luxe.Entity>();
-		// Luxe.scene.get_named_like('ammobox', ammoList);
+	// 	// Main.sDrawer.drawPolygon(this.hitbox.body);
 
-		// var ammoBodyList = new Array<luxe.collision.shapes.Shape>();
-		// for (ammoBox in ammoList) ammoBodyList.push(ammoBox.get('hitbox').body);
+	// 	// Luxe.draw.ngon({
+	// 	// 	x: this.pos.x,
+	// 	// 	y: this.pos.y,
+	// 	// 	immediate: true,
+	// 	// 	angle: -this.rotation_z,
+	// 	// });
 
-		// if (Collision.shapeWithShapes(this.hitbox.body, ammoBodyList).length != 0) {
-		// 	this.harvest_contact = true;
-		// } else {
-		// 	this.harvest_contact = false;
-		// 	// trace(Collision.shapeWithShapes(this.hitbox.body, ammoBodyList));
-		// 	trace('hit');
-		// }
+	// }
 
-		// harvest_contact = contactAmmoSweep();
-		harvest_contact = (hitbox.contact('ammobox'));
+	public function moveToCenter() {
+		Actuate.tween(this.pos, 1, {y: Main.h/2}).delay(2).onComplete(addKeepBounds);
+	}
 
-		if (harvest_contact) harvest_cooldown -= dt;
-		if (harvest_cooldown < 0) {
-			harvest_cooldown = harvest_cooldown_max;
-			ammo += 1;
+	public function addKeepBounds() {
+		this.add(new component.bounds.Keep({ name: 'bounds.keep' }));
+	}
+
+	public function hit() {
+		if (this.ammo > 0) {
+
+			Luxe.camera.shake(20);
+			this.ammo = 0;
+			
+			//TODO audio feedback
+
+		} else {
+
+			this.destroy();
+			Luxe.events.fire('maeko is doomed');
+			trace('maeko destroyed');
 		}
 
-		// ammoList = [];
-		// ammoBodyList = [];
-
+		Luxe.events.fire('effect.explosion.large', {pos: this.pos});
+		Luxe.camera.shake(100);
+		
 	}
 
-	public function orientate(_x: Float, _y: Float) {
-		this.radians = Math.atan2(
-			_y - this.pos.y,
-			_x - this.pos.x
-		);
-		// trace('orientating' + ' ' + _x + ' ' + _y);
+	public function refillAmmo() {
+		ammo = ammo_max;
 	}
-
-	// override public function onmousemove(e: MouseEvent) {
-
-	// 	var curPos = Luxe.camera.screen_point_to_world(e.pos);
-
-	// 	this.radians = Math.atan2( 
-	// 		curPos.y - this.pos.y,
-	// 		curPos.x - this.pos.x
-	// 	);
-	// }
-
-	// public function contactAmmoSweep() {
-
-	// 	var contactAmmo: Bool = false;
-	// 	var ammoList = new Array<luxe.Entity>();
-	// 	Luxe.scene.get_named_like('ammobox', ammoList);
-
-	// 	// var ammoBodyList = new Array<luxe.collision.shapes.Shape>();
-	// 	for (ammoBox in ammoList) {
-	// 		if (Collision.shapeWithShape(this.hitbox.body, ammoBox.get('hitbox').body) != null) {
-	// 			contactAmmo = true;
-	// 		}
-	// 	}
-
-	// 	return contactAmmo;
-	// }
 }

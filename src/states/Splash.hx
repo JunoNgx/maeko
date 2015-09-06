@@ -1,67 +1,60 @@
 package states;
+
 import luxe.Color;
 import luxe.Vector;
 import luxe.Sprite;
-import luxe.Input;
 import luxe.States;
+import luxe.Input;
 import phoenix.Texture;
 
 class Splash extends State {
 
-	var logo: Sprite;
-
-	var delayStartTime: Float = 1;
-	var fadeTime: Float = 1;
-	var stayTime: Float = 2;
-	var delaySwitchTime: Float = 1;
-
-	// Optionally and quickly set the next state (with name:String) here
-	var destinationState: String = 'play';
+	public var lifetime: Float = 0;
 
 	override function onenter<T> (_:T) {
-		// Create the logo sprite
-		logo = new Sprite ({
-			// Change path to the texture of your logo/splash screen here
-			texture: Luxe.resources.texture('assets/logo_box.png'),
-			pos: new Vector(Luxe.screen.mid.x, Luxe.screen.mid.y),
-			color: new Color(1, 1, 1, 0)
-		});
 
-		// Schedule fading in with a slight delay (looks better)
-		Luxe.timer.schedule(delayStartTime, fadeIn);
+		Main.camReset();
+		Luxe.renderer.clear_color = new Color(0, 0, 0, 1);
+
+		lifetime = 0;
+
+		Luxe.timer.schedule(1, spawnAureoTetra);
+		Luxe.timer.schedule(6, spawnMadeWithLuxe);
+		Luxe.timer.schedule(10, spawnHeadphone);
+
+		Luxe.timer.schedule(14, switchState);
 	}
 
-	function fadeIn() {
-		logo.color.tween(fadeTime, { a: 1 } );
-		Luxe.timer.schedule(fadeTime + stayTime, fadeOut);
+	function spawnAureoTetra() {
+		var aureo = new entity.FadingTexture('assets/AureolineTetrahedron.png', 2);
 	}
 
-	function fadeOut() {
-		logo.color.tween(fadeTime, { a: 0 } );
-		Luxe.timer.schedule(fadeTime + delaySwitchTime, switchState);
+	function spawnMadeWithLuxe() {
+		var luxe = new entity.FadingTexture('assets/MadeWithLuxe.png', 2);
+	}
+
+	function spawnHeadphone() {
+		var headphones = new entity.FadingTexture('assets/Headphones.png', 2);
 	}
 
 	// Switch to the designated state, set above
 	function switchState() {
-		Main.state.set(destinationState);
+		Main.state.set('menu');
 	}
 
-	// Optionally skip splash screen by pressing keyboard or mouse or touch
+	// Optionally skip splash screen with a touch
+	// only when a 3-second window period has passed
 	override function onmouseup(e: MouseEvent) {
-		switchState();
+		if (lifetime > 3) switchState();
 	}
 
-	override function onkeyup(e: KeyEvent) {
-		switchState();
+	override function update(dt: Float) {
+		lifetime += dt;
 	}
-
-	//override function update(dt: Float) {
-		//
-	//}
-	//
+	
 	override function onleave<T> (_:T) {
 		Luxe.timer.reset();
-		logo.destroy();
+		Luxe.scene.empty();
 	}
 
 
