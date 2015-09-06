@@ -18,7 +18,8 @@ class DrawAmmo9 extends Component {
 
 	public var r_d: Float = 64; // distance to entity
 
-	override public function update (dt: Float) {
+	// override public function update (dt: Float) {
+	function onrender (_) {
 
 		var host: entity.Maeko = cast entity;
 		var side_amt = Math.ceil(host.ammo_max/2);
@@ -77,6 +78,15 @@ class DrawAmmo9 extends Component {
 			color: new Color(1, 1, 1, 1),
 			depth: depth_,
 		});
+	}
+
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
+	}
+
+	override function ondestroy() {
+		super.ondestroy();
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 
 }

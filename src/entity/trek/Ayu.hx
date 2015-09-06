@@ -28,8 +28,9 @@ class Ayu extends Sprite {
 			name: 'ayu',
 			name_unique: true,
 			pos: new Vector(_pos_x, _pos_y),
-			size: new Vector(64, 32),
-			color: Main.c1.clone(),
+			// size: new Vector(64, 32),
+			// color: Main.c1.clone(),
+			visible: false,
 		});
 
 		velocity = new component.Velocity({name: 'velocity'});
@@ -98,7 +99,23 @@ class Ayu extends Sprite {
 		// states.Play.pAyu.push(this);
 	}
 
-	override public function update(dt: Float) {
+	// override public function update(dt: Float) {
+	function onrender(_) {
+
+		Luxe.draw.poly({
+			immediate: true,
+		    solid : true,
+		    color: Main.c1.clone(),
+		    pos: this.pos,
+		    rotation: new luxe.Quaternion().setFromEuler( new Vector(0,0,this.rotation_z).radians() ),
+		    points : [
+		        new Vector(32, -16),
+		        new Vector(32, 16),
+		        new Vector(-32, 16),
+		        new Vector(-32, -16),
+		    ]
+		});
+
 		switch(type) { // I formerly used a more complicated polygon graphic
 			case 1:
 				drawSquare(
@@ -182,5 +199,14 @@ class Ayu extends Sprite {
 
 	function playDestroySfx() {
 		Luxe.audio.play('trek_ayu_destroy');
+	}
+
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
+	}
+
+	override function destroy(?_from_parent:Bool=false) {
+		super.destroy(_from_parent);
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 }

@@ -20,7 +20,8 @@ class DrawAmmo6 extends Component {
 	public var r_2: Float = 53; // mid tier
 	public var r_3: Float = 64; // bottom tier
 
-	override public function update (dt: Float) {
+	// override public function update (dt: Float) {
+	function onrender(_) {
 
 		var host: entity.Maeko = cast entity;
 
@@ -75,6 +76,15 @@ class DrawAmmo6 extends Component {
 			angle: 90 - host.rotation_z, // lol clever code again
 			depth: depth_,
 		});
+	}
+
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
+	}
+
+	override function ondestroy() {
+		super.ondestroy();
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 
 }

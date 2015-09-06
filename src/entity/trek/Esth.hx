@@ -49,9 +49,23 @@ class Esth extends Sprite {
 			Actuate.tween(this.col, 0.1, {l: Main.c3.clone().toColorHSL().l});
 		}
 
+		// Luxe.draw.ngon({
+		// 	x: this.pos.x,
+		// 	y: this.pos.y,
+		// 	sides: 4,
+		// 	r: radius,
+		// 	color: col,
+		// 	angle: - this.rotation_z,
+		// 	immediate: true,
+		// 	depth: -1,
+		// });
+	}
+
+	function onrender(_) {
 		Luxe.draw.ngon({
 			x: this.pos.x,
 			y: this.pos.y,
+			solid: false,
 			sides: 4,
 			r: radius,
 			color: col,
@@ -59,5 +73,14 @@ class Esth extends Sprite {
 			immediate: true,
 			depth: -1,
 		});
+	}
+
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
+	}
+
+	override function destroy(?_from_parent:Bool=false) {
+		super.destroy(_from_parent);
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 }

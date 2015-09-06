@@ -38,6 +38,7 @@ class Muzzleflash extends ParticleSystem {
 
 	public function flash(_pos: Vector, _direction: Float) {
 		this.emitters.get('main').direction = _direction;
+		this.pos = _pos;
 		this.start(0.1);
 	}
 }

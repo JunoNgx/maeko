@@ -23,8 +23,35 @@ class Helipad extends luxe.Sprite {
 		moveIn();
 	}
 
-	override function update(dt: Float) {
+	// override function update(dt: Float) {
 
+	// 	Luxe.draw.ngon({
+	// 		immediate: true,
+	// 		solid: true,
+	// 		sides: 3,
+	// 		r: this.radius,
+	// 		x: this.pos.x,
+	// 		y: this.pos.y,
+	// 		color: this.color,
+	// 		angle: -180,
+	// 		depth: -10,
+	// 	});
+	// }
+
+	public function moveIn() {
+
+		Actuate.tween(this, C.trek_total_time, {radius: 900})
+			.ease(luxe.tween.easing.Sine.easeIn);
+			// .ease(luxe.tween.easing.Linear.easeNone );
+
+		Actuate.tween(this.pos, C.trek_total_time, {x: Main.w/2, y: Main.h/2})
+			.ease(luxe.tween.easing.Linear.easeNone )
+			.onComplete(function(){
+				Luxe.events.fire('trek completed');
+			});
+	}
+
+	function onrender(_) {
 		Luxe.draw.ngon({
 			immediate: true,
 			solid: true,
@@ -38,16 +65,12 @@ class Helipad extends luxe.Sprite {
 		});
 	}
 
-	public function moveIn() {
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
+	}
 
-		Actuate.tween(this, C.trek_total_time, {radius: 900})
-			.ease(luxe.tween.easing.Sine.easeIn);
-			// .ease(luxe.tween.easing.Linear.easeNone );
-
-		Actuate.tween(this.pos, C.trek_total_time, {x: Main.w/2, y: Main.h/2})
-			.ease(luxe.tween.easing.Linear.easeNone )
-			.onComplete(function(){
-				Luxe.events.fire('trek completed');
-			});
+	override function destroy(?_from_parent:Bool=false) {
+		super.destroy(_from_parent);
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 }

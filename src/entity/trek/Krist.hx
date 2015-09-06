@@ -70,17 +70,17 @@ class Krist extends Sprite {
 		esth.radians = this.radians;
 		esth.pos = this.pos;
 
-		Luxe.draw.ngon({
-			x: this.pos.x,
-			y: this.pos.y,
-			sides: 4,
-			r: radius,
-			color: Main.c3,
-			angle: - this.rotation_z,
-			immediate: true,
-			solid: true,
-			depth: -1,
-		});
+		// Luxe.draw.ngon({
+		// 	x: this.pos.x,
+		// 	y: this.pos.y,
+		// 	sides: 4,
+		// 	r: radius,
+		// 	color: Main.c3,
+		// 	angle: - this.rotation_z,
+		// 	immediate: true,
+		// 	solid: true,
+		// 	depth: -1,
+		// });
 
 		// Luxe.draw.text({
 		// 	text: '${Math.floor(radius)}' + '${isSmall}',
@@ -97,6 +97,7 @@ class Krist extends Sprite {
 		super.destroy(_from_parent);
 
 		esth.destroy();
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 
 	public function hit() {
@@ -125,6 +126,24 @@ class Krist extends Sprite {
 				true
 			);
 		}
+	}
+
+	function onrender(_) {
+		Luxe.draw.ngon({
+			x: this.pos.x,
+			y: this.pos.y,
+			sides: 4,
+			r: radius,
+			color: Main.c3,
+			angle: - this.rotation_z,
+			immediate: true,
+			solid: true,
+			depth: -1,
+		});
+	}
+
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
 	}
 
 }

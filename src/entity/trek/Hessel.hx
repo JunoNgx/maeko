@@ -61,17 +61,17 @@ class Hessel extends Sprite {
 			flash_cooldown = C.hessel_flash_cooldown;
 		}
 
-		Luxe.draw.ngon({
-			x: this.pos.x,
-			y: this.pos.y,
-			sides: 4,
-			r: C.hessel_radius,
-			color: this.color,
-			angle: - this.rotation_z,
-			immediate: true,
-			solid: true,
-			depth: -1,
-		});
+		// Luxe.draw.ngon({
+		// 	x: this.pos.x,
+		// 	y: this.pos.y,
+		// 	sides: 4,
+		// 	r: C.hessel_radius,
+		// 	color: this.color,
+		// 	angle: - this.rotation_z,
+		// 	immediate: true,
+		// 	solid: true,
+		// 	depth: -1,
+		// });
 	}
 
 	function collide() {
@@ -89,5 +89,28 @@ class Hessel extends Sprite {
 
 	function flash() {
 		Actuate.tween(this.color, 0.1, {r: 1, g: 1, b: 1}).repeat(1).reflect(true);
+	}
+
+	function onrender(_) {
+		Luxe.draw.ngon({
+			x: this.pos.x,
+			y: this.pos.y,
+			sides: 4,
+			r: C.hessel_radius,
+			color: this.color,
+			angle: - this.rotation_z,
+			immediate: true,
+			solid: true,
+			depth: -1,
+		});
+	}
+
+	override function init() {
+		Luxe.on(Luxe.Ev.render, onrender);
+	}
+
+	override function destroy(?_from_parent:Bool=false) {
+		super.destroy(_from_parent);
+		Luxe.off(Luxe.Ev.render, onrender);
 	}
 }
