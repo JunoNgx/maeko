@@ -72,11 +72,14 @@ class State extends luxe.State {
 	function spawnMaeko() {
 		p = new entity.Maeko(9);
 		// p.remove('accel');
-		p.add(new component.maeko.cannon.Circle());
-		p.add(new component.maeko.DrawAmmo9({name: 'drawammo'}));
+		// p.get('accel').isActive = false;
+		// p.get('accel').deactivate();
 		Actuate.tween(p.pos, 3, {y: Main.h * 3/4}).onComplete(function(){
 			p.addKeepBounds();
-			// p.add(new component.maeko.AccelMove({name: 'accel'}));
+			p.add(new component.maeko.cannon.Circle());
+			p.add(new component.maeko.DrawAmmo9({name: 'drawammo'}));
+			// p.add(new component.maeko.AccelMove());
+			// p.get('accel').activate();
 		});
 	}
 

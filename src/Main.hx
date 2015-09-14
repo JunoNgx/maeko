@@ -119,6 +119,7 @@ class Main extends luxe.Game {
 	}
 
 	public static function camReset() {
+		Luxe.camera.destroy();
 		Luxe.camera = new luxe.Camera({
 			name:'default camera',
 			view: Luxe.renderer.camera,

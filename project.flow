@@ -36,7 +36,7 @@
         },
 
         build : {
-            number: 7,
+            number: 9,
 
             "comment" : "flow build android --d android_release",
             dependencies : {

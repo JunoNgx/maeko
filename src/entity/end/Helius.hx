@@ -106,7 +106,7 @@ class Helius extends Sprite {
 	public function goBeserk() {
 
 		barrier.deactivate();
-		if (stopTrigger != null) stopTrigger.destroy();
+		// if (stopTrigger != null) stopTrigger.destroy();
 
 		isVulnerable = true;
 		mover.erraTopStart();
@@ -114,9 +114,11 @@ class Helius extends Sprite {
 		stopTrigger = new GTimer (C.barrage_time_railtop, function(){
 			Actuate.pause( this.mover.erratus);	
 
-			var timerGo = new GTimer(2, function() {
-				returnAndPrepare();
-			});
+			returnAndPrepare();
+
+			// var timerGo = new GTimer(2, function() {
+			// 	returnAndPrepare();
+			// });
 		});
 	}
 

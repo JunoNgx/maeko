@@ -29,7 +29,7 @@ class Ayu extends Sprite {
 			name_unique: true,
 			pos: new Vector(_pos_x, _pos_y),
 			// size: new Vector(64, 32),
-			// color: Main.c1.clone(),
+			color: Main.c1.clone(),
 			visible: false,
 		});
 
@@ -99,13 +99,13 @@ class Ayu extends Sprite {
 		// states.Play.pAyu.push(this);
 	}
 
-	// override public function update(dt: Float) {
-	function onrender(_) {
+	override public function update(dt: Float) {
+	// function onrender(_) {
 
 		Luxe.draw.poly({
 			immediate: true,
 		    solid : true,
-		    color: Main.c1.clone(),
+		    color: this.color,
 		    pos: this.pos,
 		    rotation: new luxe.Quaternion().setFromEuler( new Vector(0,0,this.rotation_z).radians() ),
 		    points : [
@@ -201,12 +201,12 @@ class Ayu extends Sprite {
 		Luxe.audio.play('trek_ayu_destroy');
 	}
 
-	override function init() {
-		Luxe.on(Luxe.Ev.render, onrender);
-	}
+	// override function init() {
+	// 	Luxe.on(Luxe.Ev.render, onrender);
+	// }
 
-	override function destroy(?_from_parent:Bool=false) {
-		super.destroy(_from_parent);
-		Luxe.off(Luxe.Ev.render, onrender);
-	}
+	// override function destroy(?_from_parent:Bool=false) {
+	// 	super.destroy(_from_parent);
+	// 	Luxe.off(Luxe.Ev.render, onrender);
+	// }
 }

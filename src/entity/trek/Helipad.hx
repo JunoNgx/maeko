@@ -23,20 +23,20 @@ class Helipad extends luxe.Sprite {
 		moveIn();
 	}
 
-	// override function update(dt: Float) {
+	override function update(dt: Float) {
 
-	// 	Luxe.draw.ngon({
-	// 		immediate: true,
-	// 		solid: true,
-	// 		sides: 3,
-	// 		r: this.radius,
-	// 		x: this.pos.x,
-	// 		y: this.pos.y,
-	// 		color: this.color,
-	// 		angle: -180,
-	// 		depth: -10,
-	// 	});
-	// }
+		Luxe.draw.ngon({
+			immediate: true,
+			solid: true,
+			sides: 3,
+			r: this.radius,
+			x: this.pos.x,
+			y: this.pos.y,
+			color: this.color,
+			angle: -180,
+			depth: -10,
+		});
+	}
 
 	public function moveIn() {
 
@@ -51,26 +51,26 @@ class Helipad extends luxe.Sprite {
 			});
 	}
 
-	function onrender(_) {
-		Luxe.draw.ngon({
-			immediate: true,
-			solid: true,
-			sides: 3,
-			r: this.radius,
-			x: this.pos.x,
-			y: this.pos.y,
-			color: this.color,
-			angle: -180,
-			depth: -10,
-		});
-	}
+// 	function onrender(_) {
+// 		Luxe.draw.ngon({
+// 			immediate: true,
+// 			solid: true,
+// 			sides: 3,
+// 			r: this.radius,
+// 			x: this.pos.x,
+// 			y: this.pos.y,
+// 			color: this.color,
+// 			angle: -180,
+// 			depth: -10,
+// 		});
+// 	}
 
-	override function init() {
-		Luxe.on(Luxe.Ev.render, onrender);
-	}
+// 	override function init() {
+// 		Luxe.on(Luxe.Ev.render, onrender);
+// 	}
 
-	override function destroy(?_from_parent:Bool=false) {
-		super.destroy(_from_parent);
-		Luxe.off(Luxe.Ev.render, onrender);
-	}
+// 	override function destroy(?_from_parent:Bool=false) {
+// 		super.destroy(_from_parent);
+// 		Luxe.off(Luxe.Ev.render, onrender);
+// 	}
 }

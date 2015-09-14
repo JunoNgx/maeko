@@ -32,16 +32,21 @@ class AccelMove extends Component {
 			host.velocity.y = offset_y * C.player_speed;
 
 			if (!Main.state.enabled('pause')) Actuate.tween(host, 0.05, {radians : -Math.PI/2 + offset_x * Math.PI/2});
+
+		} else {
+
+			var host: entity.Maeko = cast entity;
+			
+			host.velocity.x = 0;
+			host.velocity.y = 0;
+
+			host.radians = -Math.PI/2;
 		}
 
 	}
 
 	public function deactivate() {
 		isActive = false;
-		
-		var host: entity.Maeko = cast entity;
-		host.velocity.x = 0;
-		host.velocity.y = 0;
 	}
 
 	public function activate() {

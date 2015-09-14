@@ -131,7 +131,7 @@ class C {
 	public static var rail_width2: Float = 24;
 
 	public static var barrage_time: Float = 20;
-	public static var barrage_time_railtop: Float = 10;
+	public static var barrage_time_railtop: Float = 5;
 	public static var barrageFire_delay: Float = 3;
 
 	public static var engine_cooldown_min: Float = 4;

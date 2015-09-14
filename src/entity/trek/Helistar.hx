@@ -78,20 +78,6 @@ class Helistar extends luxe.Sprite {
 			resetVariance();
 		}
 
-		// Luxe.draw.ngon({
-		// 	immediate: true,
-		// 	solid: true,
-		// 	sides: 3,
-		// 	r: this.radius,
-		// 	x: this.pos.x,
-		// 	y: this.pos.y,
-		// 	color: this.color,
-		// 	angle: -180,
-		// 	depth: -11,
-		// });
-	}
-
-	function onrender(_) {
 		Luxe.draw.ngon({
 			immediate: true,
 			solid: true,
@@ -105,12 +91,26 @@ class Helistar extends luxe.Sprite {
 		});
 	}
 
-	override function init() {
-		Luxe.on(Luxe.Ev.render, onrender);
-	}
+	// function onrender(_) {
+	// 	Luxe.draw.ngon({
+	// 		immediate: true,
+	// 		solid: true,
+	// 		sides: 3,
+	// 		r: this.radius,
+	// 		x: this.pos.x,
+	// 		y: this.pos.y,
+	// 		color: this.color,
+	// 		angle: -180,
+	// 		depth: -11,
+	// 	});
+	// }
 
-	override function destroy(?_from_parent:Bool=false) {
-		super.destroy(_from_parent);
-		Luxe.off(Luxe.Ev.render, onrender);
-	}
+	// override function init() {
+	// 	Luxe.on(Luxe.Ev.render, onrender);
+	// }
+
+	// override function destroy(?_from_parent:Bool=false) {
+	// 	super.destroy(_from_parent);
+	// 	Luxe.off(Luxe.Ev.render, onrender);
+	// }
 }
