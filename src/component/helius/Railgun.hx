@@ -20,7 +20,7 @@ class Railgun extends Component {
 
 	public function fire(_degree: Float) {
 		var host: luxe.Sprite = cast entity;
-		// var rail = new entity.end.Rail(host, _degree);
+		var rail = new entity.end.Rail(host, _degree);
 
 		Luxe.audio.play('helius_railgun');
 	}

@@ -43,9 +43,15 @@ class Rail extends luxe.Sprite {
 
 		collide();
 
+		var wtext = Luxe.resources.texture('assets/white.png'); // This is an extremely
+		// dirty hack to work around a change in Luxe that demands for texture when
+		// uv is called
+
 		if (this.rotation_z == 90) { // totally dirty hack, I'm too tired to do this properly
 			// there is no center: Bool in Luxe.draw.texture()
+
 			Luxe.draw.texture({
+				texture: wtext,
 				immediate: true,
 				depth: -1,
 				color: Main.c3.clone(),
@@ -56,6 +62,7 @@ class Rail extends luxe.Sprite {
 			});
 
 			Luxe.draw.texture({
+				texture: wtext,
 				immediate: true,
 				depth: -2,
 				color: new Color(1,1,1,0.5),
@@ -66,6 +73,7 @@ class Rail extends luxe.Sprite {
 			});
 		} else {
 			Luxe.draw.texture({
+				texture: wtext,
 				immediate: true,
 				depth: -1,
 				color: Main.c3.clone(),
@@ -76,6 +84,7 @@ class Rail extends luxe.Sprite {
 			});
 
 			Luxe.draw.texture({
+				texture: wtext,
 				immediate: true,
 				depth: -2,
 				color: new Color(1,1,1,0.5),

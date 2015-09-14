@@ -74,6 +74,8 @@ class Main extends luxe.Game {
 			{id: 'assets/logo.png'},
 			{id: 'assets/logo_completed.png'}, // I'm just being lazy
 			{id: 'assets/PauseButton.png'},
+
+			{id: 'assets/white.png'} // for a dirty hack on Rail.hx
 		];
 
 		config.preload.fonts.push({ id:'assets/arcon.fnt'});
