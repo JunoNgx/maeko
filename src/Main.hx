@@ -26,7 +26,7 @@ typedef ShakeEvent = {
 
 class Main extends luxe.Game {
 
-	var initialState:String = 'end'; // First state to run, in string (luxe.States.State.name), refer to state's file
+	var initialState:String = 'splash'; // First state to run, in string (luxe.States.State.name), refer to state's file
 	var showCursor:Bool = true; // Quick setting, whether to display system cursor in-game, useful for custom cursor or certain genres of action games
 
 	// Optional values,
